@@ -1,5 +1,8 @@
 const fs = require("fs");
+const path = require("path");
 const ytdl = require("ytdl-core");
+
+const downloadsDir = path.join(__dirname, "Downloads");
 
 fs.readFile("./url.txt", "utf8", (err, url) => {
   if (err) {
@@ -28,8 +31,10 @@ fs.readFile("./url.txt", "utf8", (err, url) => {
 
       const format = videoFormats[0];
 
+      const filePath = path.join(downloadsDir, `${guidGen()}.mp4`);
+
       ytdl(url.replace('"', ""), { format }).pipe(
-        fs.createWriteStream(`${guidGen()}.mp4`)
+        fs.createWriteStream(filePath)
       );
     })
     .catch((err) => {
