@@ -17,7 +17,7 @@ fs.readFile("./url.txt", "utf8", (err, url) => {
   }
 
   ytdl
-    .getInfo(url.replace('"',''))
+    .getInfo(url.replace('"', ""))
     .then((info) => {
       const videoFormats = ytdl.filterFormats(info.formats, "videoandaudio");
 
@@ -26,13 +26,11 @@ fs.readFile("./url.txt", "utf8", (err, url) => {
         return;
       }
 
-      let format = videoFormats[0];
+      const format = videoFormats[0];
 
-      if (videoFormats.some((x) => x.width === 1080)) {
-        format = ytdl.chooseFormat(info.formats, { quality: "137" });
-      }
-
-      ytdl(url.replace('"',''), { format }).pipe(fs.createWriteStream(`${guidGen()}.mp4`));
+      ytdl(url.replace('"', ""), { format }).pipe(
+        fs.createWriteStream(`${guidGen()}.mp4`)
+      );
     })
     .catch((err) => {
       console.error("Error fetching video info:", err);
